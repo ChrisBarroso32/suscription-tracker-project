@@ -52,6 +52,38 @@ export const signUp = async (req, res, next) => {
 
 export const signIn = async (req, res, next) => {
     // Implementación de la lógica de inicio de sesión.
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne( { email });
+
+        // Varificar si el usuario existe
+        if (!user) {
+            const error = new Error('User Not Found');
+            error.statusCode = 404;
+            throw error;
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid){
+            const error = new Error('Invalid Password');
+            error.statusCode = 401;
+            throw error;
+        }
+
+        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN});
+
+        res.status(201).json({
+            success: true,
+            message: 'User signed in successfully',
+            data: {
+                token,
+                user,
+            }
+        });
+    } catch (error){
+        next(error);
+    }
 };
 
 export const signOut = async (req, res) => {

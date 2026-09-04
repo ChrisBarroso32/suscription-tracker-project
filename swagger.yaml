@@ -19,7 +19,6 @@ paths:
             schema:
               type: object
               required:
-                - name
                 - email
                 - password
               properties:
@@ -42,10 +41,33 @@ paths:
   /api/v1/auth/sign-in:
     post:
       summary: Inicia sesión en el sistema
-      tags: [Auth]
+      tags: [ Auth ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "chris@example.com"
+                password:
+                  type: string
+                  format: password
+                  example: "123456"
       responses:
-        '200':
-          description: Sesión iniciada con éxito
+        '201':
+          description: User signed in successfully
+        '401':
+          description: Invalid Password
+        '404':
+          description: User Not Found
 
   /api/v1/auth/sign-out:
     post:
