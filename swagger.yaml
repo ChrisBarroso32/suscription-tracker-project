@@ -1,0 +1,177 @@
+openapi: 3.0.0
+info:
+  title: Subscription Tracker API
+  description: Documentación de la API para el sistema de gestión de suscripciones.
+  version: 1.0.0
+servers:
+  - url: http://localhost:5500
+    description: Servidor de desarrollo local
+
+paths:
+  /api/v1/auth/sign-up:
+    post:
+      summary: Registra un nuevo usuario en el sistema
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+                - password
+              properties:
+                name:
+                  type: string
+                  example: "Christian Barroso"
+                email:
+                  type: string
+                  example: "chris@example.com"
+                password:
+                  type: string
+                  format: password
+                  example: "123456"
+      responses:
+        '201':
+          description: User created successfully
+        '409':
+          description: User already exists
+
+  /api/v1/auth/sign-in:
+    post:
+      summary: Inicia sesión en el sistema
+      tags: [Auth]
+      responses:
+        '200':
+          description: Sesión iniciada con éxito
+
+  /api/v1/auth/sign-out:
+    post:
+      summary: Cierra la sesión actual
+      tags: [Auth]
+      responses:
+        '200':
+          description: Sesión cerrada con éxito
+
+  /api/v1/users:
+    get:
+      summary: Obtener todos los usuarios
+      tags: [Users]
+      responses:
+        '200':
+          description: GET Obteniendo todos los usuarios...
+    post:
+      summary: Crear un nuevo usuario
+      tags: [Users]
+      responses:
+        '201':
+          description: CREATE Creando nuevo usuario...
+
+  /api/v1/users/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Obtener datos de un usuario específico
+      tags: [Users]
+      responses:
+        '200':
+          description: GET Datos del usuario
+    put:
+      summary: Actualizar datos de un usuario
+      tags: [Users]
+      responses:
+        '200':
+          description: UPDATE Actualizando datos del usuario
+    delete:
+      summary: Eliminar un usuario
+      tags: [Users]
+      responses:
+        '200':
+          description: DELETE Eliminando usuario
+
+  /api/v1/suscriptions:
+    get:
+      summary: Obtener todas las suscripciones
+      tags: [Subscriptions]
+      responses:
+        '200':
+          description: GET Obteniendo todas las suscripciones...
+    post:
+      summary: Crear una nueva suscripción
+      tags: [Subscriptions]
+      responses:
+        '201':
+          description: CREATE Creando nueva suscripción
+
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+          minLength: 2
+          maxLength: 50
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+          minLength: 6
+
+    Subscription:
+      type: object
+      required:
+        - name
+        - price
+        - frequency
+        - cathegory
+        - paymentMethod
+        - startDate
+        - renewalDate
+        - user
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+        price:
+          type: number
+          minimum: 0
+          maximum: 1000
+        currency:
+          type: string
+          enum: [EUR, USD, MXN]
+          default: USD
+        frequency:
+          type: string
+          enum: [diario, semanal, mensual, anual]
+        cathegory:
+          type: string
+          enum: [deportes, entretenimiento, noticias, estilo de vida, tecnología, finanzas, política, otros]
+        paymentMethod:
+          type: string
+        status:
+          type: string
+          enum: [activo, cancelado, expirado]
+          default: activo
+        startDate:
+          type: string
+          format: date-time
+        renewalDate:
+          type: string
+          format: date-time
+        user:
+          type: string
+          description: ObjectId referenciando al modelo User
