@@ -6,7 +6,7 @@ import YAML from 'yamljs'
 import { PORT } from "./config/env.js";
 
 import userRouter from "./routes/user.routes.js";
-import subscriptionRouter from "./routes/suscription.routes.js";
+import subscriptionRouter from "./routes/subscription.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import connectToMongodb from "./database/mongodb.js";
 import errorMiddleware from "./middleware/error.middleware.js";

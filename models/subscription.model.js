@@ -21,10 +21,10 @@ const subscriptionSchema = new mongoose.Schema({
     },
     frequency: {
         type: String,
-        enum: ["diario", "semanal", "mensual", "anual"],
+        enum: ["daily", "weekly", "monthly", "yearly"],
         required: true,
     },
-    cathegory:{
+    category:{
         type: String,
         enum: ["deportes", "entretenimiento", "noticias", "estilo de vida", "tecnología", "finanzas", "política", "otros"],
         required: true,
@@ -64,7 +64,7 @@ const subscriptionSchema = new mongoose.Schema({
         index: true,
     }
 
-}, { timestaps: true });
+}, { timestamps: true });
 
 // Autocalcula el fecha de renovación si falta.
 subscriptionSchema.pre("save", function (next) {

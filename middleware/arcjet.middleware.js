@@ -1,4 +1,4 @@
-import aj from '/config/arcjet.js'
+import aj from '../config/arcjet.js'
 
 const arcjetMiddleware = async (req, res, next) => {
     try {
@@ -12,7 +12,7 @@ const arcjetMiddleware = async (req, res, next) => {
         }
 
         next();
-        
+
     } catch (error){
         console.error(`Arcjet middleware error: ${error}`);
         next(error);

@@ -89,6 +89,8 @@ paths:
       responses:
         '201':
           description: CREATE Creando nuevo usuario...
+        '429':
+          description: Too Many Requests (Rate limit excedido)
 
   /api/v1/users/{id}:
     parameters:
@@ -142,9 +144,27 @@ paths:
     post:
       summary: Crear una nueva suscripción
       tags: [Subscriptions]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subscription'
       responses:
         '201':
-          description: CREATE Creando nueva suscripción
+          description: Suscripción creada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Subscription'
 
 components:
   securitySchemes:
@@ -181,9 +201,10 @@ components:
         - cathegory
         - paymentMethod
         - startDate
-        - renewalDate
-        - user
       properties:
+        _id:
+          type: string
+          readOnly: true
         name:
           type: string
           minLength: 2
@@ -194,19 +215,19 @@ components:
           maximum: 1000
         currency:
           type: string
-          enum: [EUR, USD, MXN]
+          enum: [ EUR, USD, MXN ]
           default: USD
         frequency:
           type: string
-          enum: [diario, semanal, mensual, anual]
-        cathegory:
+          enum: [ diario, semanal, mensual, anual ]
+        category:
           type: string
-          enum: [deportes, entretenimiento, noticias, estilo de vida, tecnología, finanzas, política, otros]
+          enum: [ deportes, entretenimiento, noticias, estilo de vida, tecnología, finanzas, política, otros ]
         paymentMethod:
           type: string
         status:
           type: string
-          enum: [activo, cancelado, expirado]
+          enum: [ activo, cancelado, expirado ]
           default: activo
         startDate:
           type: string
@@ -214,5 +235,7 @@ components:
         renewalDate:
           type: string
           format: date-time
+          readOnly: true
         user:
           type: string
+          readOnly: true
