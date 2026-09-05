@@ -10,6 +10,7 @@ import subscriptionRouter from "./routes/suscription.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import connectToMongodb from "./database/mongodb.js";
 import errorMiddleware from "./middleware/error.middleware.js";
+import arcjetMiddleware from "./middleware/arcjet.middleware.js";
 
 const app = express();
 const swaggerDocument = YAML.load('./swagger.yaml');
@@ -17,6 +18,7 @@ const swaggerDocument = YAML.load('./swagger.yaml');
 app.use(express.json()); // Procesa los datos enviados en formato JSON.
 app.use(express.urlencoded({ extended: false })); // Procesa los datos obtenidos de formularios HTML en un formato simple.
 app.use(cookieParser()); // Procesa las cookies que el navegador del cliente envía adjuntas de forma automática en cada petición HTTP.
+app.use(arcjetMiddleware);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
